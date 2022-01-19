@@ -52,5 +52,5 @@ np.savetxt(os.path.join(BASE_DIR, "dados_salvos",file_name +"_.csv"), result_arr
 datf = pd.read_csv( os.path.join(BASE_DIR, "dados_salvos", file_name+"_.csv"),
                     converters={'matchs': literal_eval, 'erros': literal_eval},
                     sep=';')
-
+print(datf)
 # pdb.set_trace()

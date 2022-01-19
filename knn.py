@@ -10,7 +10,6 @@ from sklearn.model_selection import train_test_split
 from sklearn import metrics
 import word_cloud as wc
 import pdb
-
 BASE_DIR = os.getcwd()
 csv_file_name = os.path.join(BASE_DIR,"dados_salvos","classic_kmeans_test_2_data.csv")
 txt_file_name = os.path.join(BASE_DIR,"dados_salvos","'classic_kmeans_test_2_labels.txt")
