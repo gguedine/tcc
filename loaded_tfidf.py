@@ -5,18 +5,18 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.feature_extraction import text
 
 
-def save(old_tfidf, dataset, file_name="tfidf_values.json"):
+def save(old_tfidf, dataset, file_name="tfidf_values"):
     #reset original_tfidf
     old_tfidf.fit_transform(dataset.setting_value)
     vocabulary = {k: str(v) for k, v in old_tfidf.vocabulary_.items()}
     ids = [str(v) for v in old_tfidf.idf_]
     tfidf_json = {'idf': ids, 'vocabulary': vocabulary}
-    json.dump(tfidf_json, open(file_name, 'w'))
+    json.dump(tfidf_json, open(file_name+".json", 'w'))
     return
 
 
-def load():
-    tfidf_values = json.load(open("tfidf_values.json"))
+def load( file_name="tfidf_values.json"):
+    tfidf_values = json.load(open(file_name+".json"))
     tfidf_values['idf'] = np.asarray(tfidf_values['idf'], dtype=np.float64)
     tfidf_values['vocabulary'] = {k: np.int64(v) for k, v in tfidf_values['vocabulary'].items()}
 

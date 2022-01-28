@@ -11,13 +11,13 @@ from sklearn import metrics
 import word_cloud as wc
 import pdb
 BASE_DIR = os.getcwd()
-csv_file_name = os.path.join(BASE_DIR,"dados_salvos","classic_kmeans_test_2_data.csv")
-txt_file_name = os.path.join(BASE_DIR,"dados_salvos","'classic_kmeans_test_2_labels.txt")
+csv_file_name = os.path.join(BASE_DIR,"dados_salvos","classic_kmeans_test_k_11_random_1_data.csv")
+txt_file_name = os.path.join(BASE_DIR,"dados_salvos","'classic_kmeans_test_k_11_random_1_labels.txt")
 
-loaded_tfidf = l_tfidf.load()
+loaded_tfidf = l_tfidf.load("tfidf_values_k_11_random_1")
 data = pd.read_csv('select.csv', sep=';', quotechar='"')
 # new_dataset = data.iloc[:5]
-new_dataset = data.sample(frac=0.2, random_state=0)
+new_dataset = data.sample(frac=0.2, random_state=1)
 
 # pdb.set_trace()
 # data = data.iloc[5:].reset_index(drop=True)
@@ -76,7 +76,8 @@ def build_recommendation(size=None):  # for all cluster size
             closest_cluster = predict[ind]
             similar_elements = data.iloc[similar_elements_ind[ind]]
             new_data_dat = new_dataset.iloc[ind]
-            ex = {'new_data': pd.DataFrame(new_data_dat).T,
+            ex = {'submission_id': new_data_dat.submission_id,
+                  'new_data': pd.DataFrame(new_data_dat).T,
                   'closest_cluster': closest_cluster,
                   'similar_elements': similar_elements,
                   'similar_elements_submission_id': similar_elements['submission_id'].array
@@ -87,28 +88,29 @@ def build_recommendation(size=None):  # for all cluster size
 
 
 recommend = build_recommendation(size=50)
+pd.set_option("min_rows", 50)
 print(recommend)
 
-file_name = os.path.join(BASE_DIR,"dados_salvos","knn_data.pkl")
+file_name = os.path.join(BASE_DIR,"dados_salvos","knn_data_k11_random_1.pkl")
 recommend.to_pickle(file_name)
 load_recommend = pd.read_pickle(file_name)
 
-def get_best_accuracy(dataset_matrix, labels, n=50): #calculate better k(n_neighbors)
-    X_train, X_test, y_train, y_test = train_test_split(dataset_matrix, labels, test_size=0.2)
-    acc = []
-    for i in range(1, n):
-        neigh = KNeighborsClassifier(n_neighbors=i).fit(X_train, y_train)
-        yhat = neigh.predict(X_test)
-        acc.append(metrics.accuracy_score(y_test, yhat))
-
-    plt.figure(figsize=(10, 6))
-    plt.plot(range(1, n), acc, color='blue', linestyle='dashed',
-             marker='o', markerfacecolor='red', markersize=10)
-    plt.title('accuracy vs. K Value')
-    plt.xlabel('K')
-    plt.ylabel('Accuracy')
-    print("Maximum accuracy:-", max(acc), "at K =", acc.index(max(acc)))
-    plt.show()
-    return acc.index(max(acc))
+# def get_best_accuracy(dataset_matrix, labels, n=50): #calculate better k(n_neighbors)
+#     X_train, X_test, y_train, y_test = train_test_split(dataset_matrix, labels, test_size=0.2)
+#     acc = []
+#     for i in range(1, n):
+#         neigh = KNeighborsClassifier(n_neighbors=i).fit(X_train, y_train)
+#         yhat = neigh.predict(X_test)
+#         acc.append(metrics.accuracy_score(y_test, yhat))
+#
+#     plt.figure(figsize=(10, 6))
+#     plt.plot(range(1, n), acc, color='blue', linestyle='dashed',
+#              marker='o', markerfacecolor='red', markersize=10)
+#     plt.title('accuracy vs. K Value')
+#     plt.xlabel('K')
+#     plt.ylabel('Accuracy')
+#     print("Maximum accuracy:-", max(acc), "at K =", acc.index(max(acc)))
+#     plt.show()
+#     return acc.index(max(acc))
 
 # get_best_accuracy(dataset_matrix, labels)

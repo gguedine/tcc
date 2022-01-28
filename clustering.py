@@ -4,20 +4,47 @@ import math
 import re
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 import pdb
 
 from collections import Counter
 from sklearn.cluster import KMeans
+from yellowbrick.cluster import SilhouetteVisualizer
 
 
 np.warnings.filterwarnings('ignore', category=np.VisibleDeprecationWarning)
+
+
+def elbow_method(data,tfidf):
+    matrix = tfidf.fit_transform(data.setting_value)
+    Sum_of_squared_distances = []
+    K = range(1, 20)
+    for k in K:
+        km = KMeans(n_clusters=k, random_state=560)
+        km = km.fit(matrix)
+        print("\nk = ")
+        print(k)
+        print("\ninertia = ")
+        print(km.inertia_)
+        print("\n")
+        Sum_of_squared_distances.append(km.inertia_)
+
+    plt.plot(K, Sum_of_squared_distances, 'bx-')
+    plt.xlabel('k')
+    plt.ylabel('Sum of squared distances')
+    plt.title('Elbow Method For Optimal k')
+    plt.show()
+
+
 def conventional_kmeans(data, tfidf, kmeans_size_keywords, k):
     # mix_diff = 9999
     # best_random = 0
-    # for random in range(200, 1000):
+    # for random in range(100, 1000):
     matrix = tfidf.fit_transform(data.setting_value)
-    #melhor random_state entre 0 e 1000 = 560, menor diferença entre min e max ficou 252
-    fit = KMeans(n_clusters=k, random_state=560).fit(matrix)
+    #melhor random_state entre 0 e 1000 = 141, menor diferença entre min e max ficou 255
+    #melhor k pelo elbow = 11
+    # fit = KMeans(n_clusters=k, random_state=141).fit(matrix)
+    fit = KMeans(n_clusters=k, random_state=1).fit(matrix)
     means_clusters = fit.predict(matrix)
     distances = fit.transform(matrix)
 
@@ -57,14 +84,14 @@ def conventional_kmeans(data, tfidf, kmeans_size_keywords, k):
 
     print("\nClusters Size")
     print(sizes)
-    #
-    # diff = sizes.max() - sizes.min()
+
+    diff = sizes.max() - sizes.min()
     # if diff < mix_diff:
     #     best_random = random
     #     mix_diff = diff
     #
     # # pdb.set_trace()
-    # print("\nDiff: : {}".format(diff))
+    print("\nDiff: : {}".format(diff))
     # print("\nRandom: {}".format(random))
     # print("\nMin Diff: {}".format(mix_diff))
     # print("\nBest Random State: {}".format(best_random))

@@ -10,6 +10,7 @@ from sklearn.feature_extraction import text
 from ast import literal_eval
 import loaded_tfidf as l_tfidf
 import importlib
+import pdb
 # >>> import some_module as sm
 # ...
 # >>> import importlib
@@ -24,7 +25,7 @@ data = pd.read_csv('select.csv', sep=';', quotechar='"')
 
 
 # new_dataset = data.iloc[:5]
-examples = data.sample(frac=0.2, random_state=0)
+examples = data.sample(frac=0.2, random_state=1)
 
 # pdb.set_trace()
 # data = data.iloc[5:].reset_index(drop=True)
@@ -55,7 +56,7 @@ tfidf = TfidfVectorizer(
 
 
 def conventinal(file_name ="classic_kmeans"):
-    conventional_labels, conventional_kmeans_centroids = cl.conventional_kmeans(data, tfidf, kmeans_size_keywords, 10)
+    conventional_labels, conventional_kmeans_centroids = cl.conventional_kmeans(data, tfidf, kmeans_size_keywords, 11)
     array = np.array(kmeans_size_keywords)
     np.savetxt(os.path.join(BASE_DIR, "dados_salvos", file_name+"_data.csv"), array, delimiter=";",
                fmt='% s', comments='',
@@ -98,16 +99,17 @@ def iteractive(file_name ="interactive_kmeans"):
 
 # saving original tfidf
 # reset original tfidf
-df, labels = conventinal(file_name="classic_kmeans_test_3")
-
+df, labels = conventinal(file_name="classic_kmeans_test_k_11_random_1")
+# cl.elbow_method(data, tfidf)
+# pdb.set_trace()
 tfidf.fit_transform(data.setting_value)
-l_tfidf.save(tfidf, data, "tfidf_values.json")
+l_tfidf.save(tfidf, data, "tfidf_values_k_11_random_1")
 
 centroids = np.array(df['cluster_center'].values.tolist())
-pt.plot_tsne_pca_with_centroids_and_newdata(tfidf.fit_transform(data.setting_value),
-                                            labels,
-                                            centroids,
-                                            tfidf.transform(examples.setting_value))
+# pt.plot_tsne_pca_with_centroids_and_newdata(tfidf.fit_transform(data.setting_value),
+#                                             labels,
+#                                             centroids,
+#                                             tfidf.transform(examples.setting_value))
 ##READS SAVED JSON##
 # tfidf_values = json.load(open("tfidf_values.json"))
 # tfidf_values['idf'] = np.asarray(tfidf_values['idf'], dtype=np.float64)

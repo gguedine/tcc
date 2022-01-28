@@ -82,9 +82,9 @@ def plot_word_cloud(new_data, dataset, n_terms=50, all_new_features=False):
 
 
 def plot_word_cloud_only_dataset(new_data, dataset, n_terms=40, all_new_features=False, plt=plt):
-    loaded_tfidf = l_tfidf.load()
+    loaded_tfidf = l_tfidf.load("tfidf_values_k_11_random_1")
     matrix_dataset = loaded_tfidf.transform(dataset.setting_value)
-    matrix_data = loaded_tfidf.transform([new_data.setting_value])
+    matrix_data = loaded_tfidf.transform(new_data.setting_value)
     # filter only used features
     top_dataset_keywords = kw.get_top_keywords_by_data(matrix_dataset, loaded_tfidf.get_feature_names(),
                                                        n_terms=n_terms)
