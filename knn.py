@@ -6,6 +6,7 @@ import numpy as np
 import loaded_tfidf as l_tfidf
 from sklearn.neighbors import KNeighborsClassifier, NearestNeighbors
 from ast import literal_eval
+from scipy.spatial import distance_matrix
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
 import word_cloud as wc
@@ -50,6 +51,17 @@ def predicted_labels():
 predict = predicted_labels()
 
 
+def sort_similars_by_distance_matrix(new_data, similar_data_slice, loaded_tfidf, size=None):
+    if (size is None) or (size > len(similar_data_slice)):
+        size = len(similar_data_slice)
+    sim_elements = similar_data_slice.setting_value
+    similar_elements_matrix = np.array(loaded_tfidf.transform(sim_elements).todense())
+    new_element_matrix = new_data
+    distance_array = distance_matrix(new_element_matrix, similar_elements_matrix)[0]
+    sorted_index = np.argsort(distance_array)
+    sorted_similar_elements = similar_data_slice.iloc[sorted_index][:size]
+    return sorted_similar_elements
+
 def build_recommendation(size=None):  # for all cluster size
     if size is None:
         recommendation = pd.DataFrame({})
@@ -74,12 +86,16 @@ def build_recommendation(size=None):  # for all cluster size
         similar_elements_ind = nn.kneighbors(new_dataset_matrix, return_distance=False)
         for ind in range(len(new_dataset)):
             closest_cluster = predict[ind]
+            knn_similar_elements = data.loc[data['submission_id'].isin(df['cluster_elements'][closest_cluster])]
+            sorted_similart_elements = sort_similars_by_distance_matrix([new_dataset_matrix[ind]], knn_similar_elements,
+                                                                        loaded_tfidf, size=size)
             similar_elements = data.iloc[similar_elements_ind[ind]]
             new_data_dat = new_dataset.iloc[ind]
             ex = {'submission_id': new_data_dat.submission_id,
                   'new_data': pd.DataFrame(new_data_dat).T,
                   'closest_cluster': closest_cluster,
                   'similar_elements': similar_elements,
+                  'knn_similar_elements_submission_id': sorted_similart_elements['submission_id'].array,
                   'similar_elements_submission_id': similar_elements['submission_id'].array
                   }
             recommendation = recommendation.append(ex, ignore_index=True)
@@ -90,6 +106,7 @@ def build_recommendation(size=None):  # for all cluster size
 recommend = build_recommendation(size=50)
 pd.set_option("min_rows", 50)
 print(recommend)
+# pdb.set_trace()
 
 file_name = os.path.join(BASE_DIR,"dados_salvos","knn_data_k11_random_1.pkl")
 recommend.to_pickle(file_name)

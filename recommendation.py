@@ -100,115 +100,150 @@ print(recommend)
 
 BASE_DIR = os.getcwd()
 file_name = os.path.join(BASE_DIR,"dados_salvos","recommendation_data_k11_random_1.pkl")
-# recommend.to_pickle(file_name)
+recommend.to_pickle(file_name)
 load_recommendation = pd.read_pickle(file_name)
 recommend = load_recommendation
 
-#
-# def word_cloud_plot(submission_id):
-#     f, ax = plt.subplots(2, 2, figsize=(20, 10))
-#     # ind = 0
-#     # for ind in range(len(new_dataset)):
-#     #     # for j in  len(recommendation):
-#     #     wc.plot_word_cloud_only_dataset(recommendation.iloc[0].new_data, recommendation.iloc[ind].similar_elements,
-#     #                                         all_new_features=True,plt=ax[ind])
-#     # pdb.set_trace()
-#     example_index = recommend.loc[recommend['submission_id'] == submission_id].index[0]
-#     example_new_data = recommend.iloc[example_index].new_data
-#     used_clusters = [recommend.iloc[example_index].closest_cluster]
-#     others_index = []
-#     for ix in range(4):
-#         ex = recommend.loc[~recommend.closest_cluster.isin(used_clusters)].sample(n=1, random_state=1)
-#         others_index.append(ex.index[0])
-#         used_clusters.append(ex.closest_cluster.array[0])
-#
-#     print("\nCurrent Example: ")
-#     print(recommend.iloc[[example_index]])
-#     wc.plot_word_cloud_only_dataset(example_new_data,
-#                                     recommend.iloc[example_index].similar_elements,
-#                                     all_new_features=True, plt=ax[0][0])
-#
-#     print("\nCurrent Example: ")
-#     print(recommend.iloc[[others_index[0]]])
-#     wc.plot_word_cloud_only_dataset(example_new_data,
-#                                     recommend.iloc[others_index[0]].similar_elements,
-#                                     all_new_features=True, plt=ax[0][1])
-#
-#     print("\nCurrent Example: ")
-#     print(recommend.iloc[[others_index[1]]])
-#     wc.plot_word_cloud_only_dataset(example_new_data,
-#                                     recommend.iloc[others_index[1]].similar_elements,
-#                                     all_new_features=True, plt=ax[1][0])
-#
-#     print("\nCurrent Example: ")
-#     print(recommend.iloc[[others_index[2]]])
-#     wc.plot_word_cloud_only_dataset(example_new_data,
-#                                     recommend.iloc[others_index[2]].similar_elements,
-#                                     all_new_features=True, plt=ax[1][1])
-#
-#     # print("\nCurrent Example: ")
-#     # print(recommend.iloc[[others_index[3]]])
-#     # wc.plot_word_cloud_only_dataset(example_new_data,
-#     #                                 recommend.iloc[others_index[3]].similar_elements,
-#     #                                 all_new_features=True, plt=ax[4])
-#     # plt.subplots_adjust(wspace=.1, left=.01, right=.99)
-#     plt.subplots_adjust(wspace=0, left=0, right=1, bottom=0, top=1)
-#     plt.show()
-#
-# def word_cloud_plot_example_own_cluster(submission_ids):
-#     if len(submission_ids) > 5:
-#         return print("Deve ser passado no máximo 5 ids!")
-#     f, ax = plt.subplots(len(submission_ids),1, figsize=(20, 10))
-#     # ind = 0
-#     # for ind in range(len(new_dataset)):
-#     #     # for j in  len(recommendation):
-#     #     wc.plot_word_cloud_only_dataset(recommendation.iloc[0].new_data, recommendation.iloc[ind].similar_elements,
-#     #                                         all_new_features=True,plt=ax[ind])
-#
-#     for idx, val in enumerate(submission_ids):
-#         example_index = recommend.loc[recommend['submission_id'] == val].index[0]
-#         print("\nCurrent Example: ")
-#         print(recommend.iloc[[example_index]])
-#         wc.plot_word_cloud_only_dataset(recommend.iloc[example_index].new_data, recommend.iloc[example_index].similar_elements,
-#                                         all_new_features=True, plt=ax[idx])
-#
-#
-#     plt.subplots_adjust(wspace=.1, left=.01, right=.99)
-#     plt.show()
-#
-# def word_cloud_plot_1():
-#     f, ax = plt.subplots(2, 2, figsize=(20, 10))
-#     #ficou legal usando recommend.iloc[1 ou 4 ou 7].new_data,
-#     wc.plot_word_cloud_only_dataset(recommend.iloc[526].new_data, recommend.iloc[526].similar_elements,
-#                                     all_new_features=True, plt=ax[0][0])
-#     wc.plot_word_cloud_only_dataset(recommend.iloc[526].new_data, recommend.iloc[0].similar_elements,
-#                                     all_new_features=True, plt=ax[0][1])
-#     wc.plot_word_cloud_only_dataset(recommend.iloc[526].new_data, recommend.iloc[4].similar_elements,
-#                                     all_new_features=True, plt=ax[1][0])
-#     wc.plot_word_cloud_only_dataset(recommend.iloc[526].new_data, recommend.iloc[1].similar_elements,
-#                                     all_new_features=True, plt=ax[1][1])
-#     plt.subplots_adjust(wspace=0, left=0, right=1, bottom=0, top=1)
-#     plt.show()
-#
-# def word_cloud_plot_2():
-#     f, ax = plt.subplots(2, 2, figsize=(20, 10))
-#     #ficou legal usando recommend.iloc[1 ou 4 ou 7].new_data,
-#     wc.plot_word_cloud_only_dataset(recommend.iloc[1].new_data, recommend.iloc[526].similar_elements,
-#                                     all_new_features=True, plt=ax[0][0])
-#     wc.plot_word_cloud_only_dataset(recommend.iloc[1].new_data, recommend.iloc[0].similar_elements,
-#                                     all_new_features=True, plt=ax[0][1])
-#     wc.plot_word_cloud_only_dataset(recommend.iloc[1].new_data, recommend.iloc[4].similar_elements,
-#                                     all_new_features=True, plt=ax[1][0])
-#     wc.plot_word_cloud_only_dataset(recommend.iloc[1].new_data, recommend.iloc[1].similar_elements,
-#                                     all_new_features=True, plt=ax[1][1])
-#     plt.subplots_adjust(wspace=0, left=0, right=1, bottom=0, top=1)
-#     plt.show()
+
+def word_cloud_plot(submission_id, highlight=True):
+    f, ax = plt.subplots(2, 2, figsize=(20, 10))
+    # ind = 0
+    # for ind in range(len(new_dataset)):
+    #     # for j in  len(recommendation):
+    #     wc.plot_word_cloud_only_dataset(recommendation.iloc[0].new_data, recommendation.iloc[ind].similar_elements,
+    #                                         all_new_features=True,plt=ax[ind])
+    # pdb.set_trace()
+    example_index = recommend.loc[recommend['submission_id'] == submission_id].index[0]
+    if highlight == True:
+        example_new_data = recommend.iloc[example_index].new_data
+    else:
+        example_new_data = None
+    used_clusters = [recommend.iloc[example_index].closest_cluster]
+    others_index = []
+    for ix in range(4):
+        ex = recommend.loc[~recommend.closest_cluster.isin(used_clusters)].sample(n=1, random_state=1)
+        others_index.append(ex.index[0])
+        used_clusters.append(ex.closest_cluster.array[0])
+
+    print("\nCurrent Example: ")
+    print(recommend.iloc[[example_index]])
+    wc.plot_word_cloud_only_dataset(recommend.iloc[example_index].similar_elements,
+                                    new_data=example_new_data,
+                                    all_new_features=True, plt=ax[0][0])
+
+    print("\nCurrent Example: ")
+    print(recommend.iloc[[others_index[0]]])
+    wc.plot_word_cloud_only_dataset(recommend.iloc[others_index[0]].similar_elements,
+                                    new_data=example_new_data,
+                                    all_new_features=True, plt=ax[0][1])
+
+    print("\nCurrent Example: ")
+    print(recommend.iloc[[others_index[1]]])
+    wc.plot_word_cloud_only_dataset(recommend.iloc[others_index[1]].similar_elements,
+                                    new_data=example_new_data,
+                                    all_new_features=True, plt=ax[1][0])
+
+    print("\nCurrent Example: ")
+    print(recommend.iloc[[others_index[2]]])
+    wc.plot_word_cloud_only_dataset(recommend.iloc[others_index[2]].similar_elements,
+                                    new_data=example_new_data,
+                                    all_new_features=True, plt=ax[1][1])
+
+    # print("\nCurrent Example: ")
+    # print(recommend.iloc[[others_index[3]]])
+    # wc.plot_word_cloud_only_dataset(example_new_data,
+    #                                 recommend.iloc[others_index[3]].similar_elements,
+    #                                 all_new_features=True, plt=ax[4])
+    # plt.subplots_adjust(wspace=.1, left=.01, right=.99)
+    plt.subplots_adjust(wspace=0, left=0, right=1, bottom=0, top=1)
+    plt.show()
+
+def word_cloud_plot_example_own_cluster(submission_ids):
+    if len(submission_ids) > 5:
+        return print("Deve ser passado no máximo 5 ids!")
+    f, ax = plt.subplots(len(submission_ids),1, figsize=(20, 10))
+    # ind = 0
+    # for ind in range(len(new_dataset)):
+    #     # for j in  len(recommendation):
+    #     wc.plot_word_cloud_only_dataset(recommendation.iloc[0].new_data, recommendation.iloc[ind].similar_elements,
+    #                                         all_new_features=True,plt=ax[ind])
+
+    for idx, val in enumerate(submission_ids):
+        example_index = recommend.loc[recommend['submission_id'] == val].index[0]
+        print("\nCurrent Example: ")
+        print(recommend.iloc[[example_index]])
+        wc.plot_word_cloud_only_dataset(recommend.iloc[example_index].similar_elements,
+                                        new_data=recommend.iloc[example_index].new_data,
+                                        all_new_features=True, plt=ax[idx])
+
+
+    plt.subplots_adjust(wspace=.1, left=.01, right=.99)
+    plt.show()
+
+def word_cloud_plot_example_own_cluster_no_highligth(submission_ids):
+    if len(submission_ids) > 5:
+        return print("Deve ser passado no máximo 5 ids!")
+    f, ax = plt.subplots(len(submission_ids),1, figsize=(20, 10))
+    # ind = 0
+    # for ind in range(len(new_dataset)):
+    #     # for j in  len(recommendation):
+    #     wc.plot_word_cloud_only_dataset(recommendation.iloc[0].new_data, recommendation.iloc[ind].similar_elements,
+    #                                         all_new_features=True,plt=ax[ind])
+
+    for idx, val in enumerate(submission_ids):
+        example_index = recommend.loc[recommend['submission_id'] == val].index[0]
+        print("\nCurrent Example: ")
+        print(recommend.iloc[[example_index]])
+        wc.plot_word_cloud_only_dataset(recommend.iloc[example_index].similar_elements,
+                                        new_data=None,
+                                        all_new_features=True, plt=ax[idx])
+
+
+    plt.subplots_adjust(wspace=.1, left=.01, right=.99)
+    plt.show()
+
+def word_cloud_plot_1():
+    f, ax = plt.subplots(2, 2, figsize=(20, 10))
+    #ficou legal usando recommend.iloc[1 ou 4 ou 7].new_data,
+    wc.plot_word_cloud_only_dataset(recommend.iloc[526].similar_elements,
+                                    new_data=recommend.iloc[526].new_data,
+                                    all_new_features=True, plt=ax[0][0])
+    wc.plot_word_cloud_only_dataset(recommend.iloc[0].similar_elements,
+                                    new_data=recommend.iloc[526].new_data,
+                                    all_new_features=True, plt=ax[0][1])
+    wc.plot_word_cloud_only_dataset(recommend.iloc[4].similar_elements,
+                                    new_data=recommend.iloc[526].new_data,
+                                    all_new_features=True, plt=ax[1][0])
+    wc.plot_word_cloud_only_dataset(recommend.iloc[1].similar_elements,
+                                    new_data=recommend.iloc[526].new_data,
+                                    all_new_features=True, plt=ax[1][1])
+    plt.subplots_adjust(wspace=0, left=0, right=1, bottom=0, top=1)
+    plt.show()
+
+def word_cloud_plot_2():
+    f, ax = plt.subplots(2, 2, figsize=(20, 10))
+    #ficou legal usando recommend.iloc[1 ou 4 ou 7].new_data,
+    wc.plot_word_cloud_only_dataset(recommend.iloc[526].similar_elements,
+                                    new_data=recommend.iloc[1].new_data,
+                                    all_new_features=True, plt=ax[0][0])
+    wc.plot_word_cloud_only_dataset(recommend.iloc[0].similar_elements,
+                                    new_data=recommend.iloc[1].new_data,
+                                    all_new_features=True, plt=ax[0][1])
+    wc.plot_word_cloud_only_dataset(recommend.iloc[4].similar_elements,
+                                    new_data=recommend.iloc[1].new_data,
+                                    all_new_features=True, plt=ax[1][0])
+    wc.plot_word_cloud_only_dataset(recommend.iloc[1].similar_elements,
+                                    new_data=recommend.iloc[1].new_data,
+                                    all_new_features=True, plt=ax[1][1])
+    plt.subplots_adjust(wspace=0, left=0, right=1, bottom=0, top=1)
+    plt.show()
 
 
 # pdb.set_trace()
 # word_cloud_plot_1()#sub_id:6095 cluster 8
 # word_cloud_plot_2()#sub_id:5972 cluster 5
-# word_cloud_plot(7122)
+# word_cloud_plot(7431,highlight=False)
+# word_cloud_plot(5689,highlight=False)
 # word_cloud_plot(6496)
 # word_cloud_plot(5906)
 # word_cloud_plot(5972)

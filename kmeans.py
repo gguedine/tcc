@@ -101,15 +101,13 @@ def iteractive(file_name ="interactive_kmeans"):
 # reset original tfidf
 df, labels = conventinal(file_name="classic_kmeans_test_k_11_random_1")
 # cl.elbow_method(data, tfidf)
-# pdb.set_trace()
 tfidf.fit_transform(data.setting_value)
 l_tfidf.save(tfidf, data, "tfidf_values_k_11_random_1")
 
 centroids = np.array(df['cluster_center'].values.tolist())
-# pt.plot_tsne_pca_with_centroids_and_newdata(tfidf.fit_transform(data.setting_value),
+# pt.plot_tsne_pca_with_centroids(tfidf.fit_transform(data.setting_value),
 #                                             labels,
-#                                             centroids,
-#                                             tfidf.transform(examples.setting_value))
+#                                             centroids)
 ##READS SAVED JSON##
 # tfidf_values = json.load(open("tfidf_values.json"))
 # tfidf_values['idf'] = np.asarray(tfidf_values['idf'], dtype=np.float64)

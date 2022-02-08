@@ -74,7 +74,7 @@ def plot_tsne_pca_with_centroids(data, labels, centroids):
     tsne_centroids = tsne_result[-centroids.shape[0]:, :]
     tsne_result = tsne_result[:-centroids.shape[0], :]
 
-    f, ax = plt.subplots(1, 2, figsize=(14, 6))
+    f, ax = plt.subplots(1, 2, figsize=(20, 10))
     ax[0].scatter(pca_result[:, 0], pca_result[:, 1], c=label_subset)
     ax[0].scatter(pca_centroids[:, 0], pca_centroids[:, 1], marker='x', s=80, color='k')
     ax[0].set_title('PCA Cluster Plot')
@@ -82,6 +82,7 @@ def plot_tsne_pca_with_centroids(data, labels, centroids):
     ax[1].scatter(x=tsne_result[:, 0], y=tsne_result[:, 1], c=label_subset)
     ax[1].scatter(x=tsne_centroids[:, 0], y=tsne_centroids[:, 1], marker='x', s=80, color='k')
     ax[1].set_title('TSNE Cluster Plot')
+    plt.subplots_adjust(wspace=0.2, left=0.05, right=0.95, bottom=0.05, top=0.95)
     plt.show()
 
 

@@ -81,20 +81,22 @@ def plot_word_cloud(new_data, dataset, n_terms=50, all_new_features=False):
     return
 
 
-def plot_word_cloud_only_dataset(new_data, dataset, n_terms=40, all_new_features=False, plt=plt):
+def plot_word_cloud_only_dataset(dataset, new_data=None, n_terms=40, all_new_features=False, plt=plt):
     loaded_tfidf = l_tfidf.load("tfidf_values_k_11_random_1")
     matrix_dataset = loaded_tfidf.transform(dataset.setting_value)
-    matrix_data = loaded_tfidf.transform(new_data.setting_value)
     # filter only used features
     top_dataset_keywords = kw.get_top_keywords_by_data(matrix_dataset, loaded_tfidf.get_feature_names(),
                                                        n_terms=n_terms)
-    if all_new_features:
-        arr = np.array(matrix_data.todense())[0]
-        ind = np.where(arr != 0)
-        features_arr = np.array(loaded_tfidf.get_feature_names())
-        top_data_keywords = features_arr[ind]
-    else:
-        top_data_keywords = kw.get_top_keywords_by_data(matrix_data, loaded_tfidf.get_feature_names(), n_terms=n_terms)
+    if new_data is not None:
+        matrix_data = loaded_tfidf.transform(new_data.setting_value)
+        if all_new_features:
+            arr = np.array(matrix_data.todense())[0]
+            ind = np.where(arr != 0)
+            features_arr = np.array(loaded_tfidf.get_feature_names())
+            top_data_keywords = features_arr[ind]
+        else:
+            top_data_keywords = kw.get_top_keywords_by_data(matrix_data, loaded_tfidf.get_feature_names(), n_terms=n_terms)
+
 
     top_keywords = np.sort(np.unique(top_dataset_keywords))
     top_index = np.where(np.in1d(loaded_tfidf.get_feature_names(), top_keywords))[0]
@@ -110,15 +112,17 @@ def plot_word_cloud_only_dataset(new_data, dataset, n_terms=40, all_new_features
         width=3000, height=2000
     ).generate_from_frequencies(frequency)
 
-    similars = list(set(top_data_keywords) & set(top_dataset_keywords))
     print("\n**********\n")
     print("Top Keywords = [\n{}\n]".format(top_keywords))
-    print("Similars words = [\n{}\n]".format(frequency[similars].to_string()))
-    print("Similars words total frequency = {}...".format(frequency[similars].sum()))
+    similars = None
+    if new_data is not None:
+        similars = list(set(top_data_keywords) & set(top_dataset_keywords))
+        print("Similars words = [\n{}\n]".format(frequency[similars].to_string()))
+        print("Similars words total frequency = {}...".format(frequency[similars].sum()))
 
     def color_function(word, *args, **kwargs):
         size = frequency[word]
-        if word in similars:
+        if (similars is not None) and (word in similars):
             color = "hsl(0, 95%%, %d%%)" % (  # np.rint(scale_number(size, 68, 75, frequency.min(), frequency.max())),
                 scale_number(size, 40, 50, frequency.min(), frequency.max()))
                 # scale_number(-size, 20, 40, -frequency.max(), -frequency.min()))
@@ -127,7 +131,10 @@ def plot_word_cloud_only_dataset(new_data, dataset, n_terms=40, all_new_features
             # color = "hsl(0, 0%%, %d%%)" % (scale_number(-size, 0, 25, -frequency.max(), -frequency.min()))
         return color
 
+
     wordcloud.recolor(color_func=color_function)
+
+
     # plt.figure(figsize=(20, 10))
     plt.imshow(wordcloud, interpolation='bilinear')
     # plt.tight_layout(pad=0)
